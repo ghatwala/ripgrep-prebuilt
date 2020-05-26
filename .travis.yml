@@ -1,12 +1,20 @@
 language: bash
-os: linux-ppc64le
 addons:
   apt:
     packages:
     - cargo
 rust: nightly
-script:
+before_script:
 - sh ./build/build_ppc.sh
+- curl https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+- source ~/.nvm/nvm.sh
+- nvm install 10
+jobs:
+  include:
+    - arch: ppc64le
+      script: sh ./build/build_ppc.sh
+    - arch: s390x
+      script: sh ./build/build_s390x.sh
 deploy:
   provider: releases
   file_glob: true
